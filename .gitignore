@@ -1,0 +1,13 @@
+STM32F030F4/Firmware/ChibiTerm/Objects/*.crf
+STM32F030F4/Firmware/ChibiTerm/Objects/*.d
+STM32F030F4/Firmware/ChibiTerm/Objects/*.o
+STM32F030F4/Firmware/ChibiTerm/Objects/*.htm
+STM32F030F4/Firmware/ChibiTerm/Objects/*.lnp
+STM32F030F4/Firmware/ChibiTerm/Objects/*.sct
+STM32F030F4/Firmware/ChibiTerm/Objects/*.axf
+STM32F030F4/Firmware/ChibiTerm/Objects/*.dep
+
+STM32F030F4/Firmware/ChibiTerm/Listings/*.lst
+STM32F030F4/Firmware/ChibiTerm/Listings/*.i
+
+
