@@ -28,11 +28,12 @@
 
 FIFO_DECL(RxBuf,RX_FIFO_Size);
 FIFO_DECL(TxBuf,TX_FIFO_Size);
+const uint32_t USART_BAUD_RATES[] = { 2400, 4800, 9600, 19200, 38400, 57600, 115200 };
 
-void USART_Init(void)
+void USART_Init(USART_CONFIG *cfg)
 {
 	RCC->APB2ENR |= RCC_APB2ENR_USART1EN;									// Enable UART1 clock
-  USART1->BRR = CPU_CLOCK/UART_BAUD;										// Set default baud rate
+  USART1->BRR = CPU_CLOCK/cfg->BAUD_RATE;										// Set default baud rate
 #ifdef AUTOBAUD
 	USART1->CR2 = USART_CR2_ABRMODE_0|USART_CR2_ABREN;		// enable autobaud, 1 stop bit
 #endif
@@ -45,6 +46,14 @@ void USART_Init(void)
   // NVIC IRQ
   NVIC_SetPriority(USART1_IRQn,USART_IRQ_PRIORITY);			// Lowest priority																	// Highest priority
   NVIC_EnableIRQ(USART1_IRQn);
+}
+
+void USART_Disable(void)
+{
+	RCC->APB2ENR &= ~RCC_APB2ENR_USART1EN;									// Enable UART1 clock
+	
+  // NVIC IRQ
+  NVIC_DisableIRQ(USART1_IRQn);
 }
 
 void USART1_IRQHandler(void)

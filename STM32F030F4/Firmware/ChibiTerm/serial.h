@@ -16,11 +16,24 @@
 #define TX_FIFO_Size						16
 #define USART_IRQ_PRIORITY  		3
 
-void USART_Init(void);
+extern const uint32_t USART_BAUD_RATES[];
+
+
+typedef struct  
+{
+	uint32_t BAUD_RATE;
+	uint8_t OPTIONS;
+	
+} USART_CONFIG;
+
+void USART_Init(USART_CONFIG *cfg);
+void USART_Disable(void);
 void Putchar(uint8_t data);
 void PutStr(const char *string);
 void Putint(uint8_t n);
 void Puthex(uint8_t n);
+
+
 
 
 extern FIFO_Data_t RxBuf[], TxBuf[];

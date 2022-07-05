@@ -26,17 +26,26 @@
 #include "serial.h"
 #include "ps2.h"
 
+enum {MODE_NORMAL, MODE_SETUP};
+
 int main(void)
 {
+	int mode = MODE_NORMAL;
 	VGA_Init();
-  USART_Init();
+
+	USART_CONFIG cfg = {UART_BAUD, 0};
+  USART_Init(&cfg);
 	PS2_Init();
   ANSI_Init();
 
 	while(1)
 	{
-		if(FIFO_ReadAvail((FIFO*)RxBuf))
-			ANSI_FSM(Getc((FIFO*)RxBuf));
+		if(mode == MODE_NORMAL)
+		{
+			if(FIFO_ReadAvail((FIFO*)RxBuf))
+				ANSI_FSM(Getc((FIFO*)RxBuf));		
+		}
+
 
 		if(FIFO_ReadAvail((FIFO*)PS2_Buf))
 			PS2_Task();
