@@ -38,13 +38,21 @@ void onKeyUp(uint8_t code)
 		mode = MODE_SETUP;
 		void USART_Disable(void);
 	}
+	
+	if(mode == MODE_SETUP && code == F10_KEY)
+	{
+		mode = MODE_NORMAL;
+		USART_CONFIG cfg = {UART_BAUD, USART_PARITY_NONE, USART_STOP_BIT1};
+		USART_Init(&cfg);
+	}	
+	
 }
 
 int main(void)
 {
 	VGA_Init();
 
-	USART_CONFIG cfg = {UART_BAUD, 0};
+	USART_CONFIG cfg = {UART_BAUD, USART_PARITY_NONE, USART_STOP_BIT1};
   USART_Init(&cfg);
 	PS2_Init();
 	PS2_Subscribe(onKeyUp);

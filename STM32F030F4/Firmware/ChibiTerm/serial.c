@@ -33,7 +33,7 @@ const uint32_t USART_BAUD_RATES[] = { 2400, 4800, 9600, 19200, 38400, 57600, 115
 void USART_Init(USART_CONFIG *cfg)
 {
 	RCC->APB2ENR |= RCC_APB2ENR_USART1EN;									// Enable UART1 clock
-  USART1->BRR = CPU_CLOCK/cfg->BAUD_RATE;										// Set default baud rate
+  USART1->BRR = CPU_CLOCK / cfg->baud_rate;										// Set default baud rate
 #ifdef AUTOBAUD
 	USART1->CR2 = USART_CR2_ABRMODE_0|USART_CR2_ABREN;		// enable autobaud, 1 stop bit
 #endif

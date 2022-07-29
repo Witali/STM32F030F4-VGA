@@ -18,11 +18,25 @@
 
 extern const uint32_t USART_BAUD_RATES[];
 
+enum USART_PARITY
+{
+	USART_PARITY_NONE,
+	USART_PARITY_ODD,
+	USART_PARITY_EVEN	
+};
+
+enum USART_STOP_BIT
+{
+	USART_STOP_BIT1,
+	USART_STOP_BIT1_5,
+	USART_STOP_BIT2
+};
 
 typedef struct  
 {
-	uint32_t BAUD_RATE;
-	uint8_t OPTIONS;
+	uint32_t baud_rate;
+	uint8_t parity;
+	uint8_t stop_bit;
 	
 } USART_CONFIG;
 
