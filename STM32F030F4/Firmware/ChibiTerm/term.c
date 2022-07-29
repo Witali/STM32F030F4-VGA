@@ -25,17 +25,29 @@
 #include "ansi.h"
 #include "serial.h"
 #include "ps2.h"
+#include "ps2 table.h"
+#include "settings.h"
 
 enum {MODE_NORMAL, MODE_SETUP};
+static int mode = MODE_NORMAL;
+
+void onKeyUp(uint8_t code)
+{
+	if(code == F12_KEY)
+	{
+		mode = MODE_SETUP;
+		void USART_Disable(void);
+	}
+}
 
 int main(void)
 {
-	int mode = MODE_NORMAL;
 	VGA_Init();
 
 	USART_CONFIG cfg = {UART_BAUD, 0};
   USART_Init(&cfg);
 	PS2_Init();
+	PS2_Subscribe(onKeyUp);
   ANSI_Init();
 
 	while(1)
@@ -44,14 +56,18 @@ int main(void)
 		{
 			if(FIFO_ReadAvail((FIFO*)RxBuf))
 				ANSI_FSM(Getc((FIFO*)RxBuf));		
+
+			if(FIFO_ReadAvail((FIFO*)PS2_Buf))
+				PS2_Task();
+			
+			if(Cursor.Update)
+				Cursor_Task();
+		
 		}
-
-
-		if(FIFO_ReadAvail((FIFO*)PS2_Buf))
-			PS2_Task();
+		else // SETUP
+		{
 		
-		if(Cursor.Update)
-			Cursor_Task();
-		
+		}
+			
 	}
 }

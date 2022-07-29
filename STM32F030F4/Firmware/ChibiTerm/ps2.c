@@ -46,6 +46,7 @@ static uint16_t Modifiers;
 static volatile PS2_IF_t PS2_IF;
 static PS2_State_t PS2_Fsm;
 static uint8_t PS2_Cmd,PS2_Cmd_Arg;
+static PS2_Handler PS2_onKeyUp = NULL;
 
 #include "ps2 table.c"
 
@@ -63,6 +64,14 @@ void PS2_Init(void)
 	// NVIC IRQ
   NVIC_SetPriority(EXTI0_1_IRQn,PS2_IRQ_PRIORITY);
   NVIC_EnableIRQ(EXTI0_1_IRQn);
+}
+
+void PS2_Subscribe(PS2_Handler callback)
+{
+	if(callback != NULL)
+	{
+		PS2_onKeyUp = callback;
+	}
 }
 
 // PS/2 IRQ handler at PA1
@@ -362,9 +371,17 @@ void PS2_Task(void)
 			    {
 						//PS2_Decode(ps2_data);
 						if (Modifiers&RELEASE_MODIFIER)
-						  Key_Up(ps2_data);
+						{
+							Key_Up(ps2_data);
+							if(PS2_onKeyUp != NULL)
+							{
+								PS2_onKeyUp(ps2_data);
+							}
+						}
 						else
+						{
 						  Key_Down(ps2_data);
+						}
 						Modifiers&=~(RELEASE_MODIFIER|EXTEND_MODIFIER);
 					}
 				}		

@@ -44,12 +44,16 @@
 #define PS2_CLK_BIT							(1<<PS2_CLK)
 #define PS2_DAT_BIT							(1<<PS2_DAT)
 
+typedef void (*PS2_Handler)(uint8_t key_code);
+
 void    	PS2_Init(void);
 int16_t 	PS2_Get(void);
 uint8_t 	PS2_Send(uint8_t Cmd);
 void 			PS2_Task(void);
 uint16_t 	PS2_Parity(uint8_t byte);
 void    	PS2_Decode(uint8_t key_code);
+void			PS2_Subscribe(PS2_Handler callback);
+
 void      NumLockOn(void);
 void      NumLockOff(void);
 
